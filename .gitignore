@@ -1,2 +1,7 @@
 docs
 node_modules
+dist
+.turbo
+*.env
+.env.local
+*.sig
