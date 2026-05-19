@@ -14,8 +14,9 @@ import type { ExtractionResult, RawBlock } from "@kora/types";
 // Helpers
 // ---------------------------------------------------------------------------
 
-function parse(html: string, sourceUrl = "https://acme.com/page"): Promise<ExtractionResult> {
-  return parseHtml(html, { sourceUrl });
+async function parse(html: string, sourceUrl = "https://acme.com/page"): Promise<ExtractionResult> {
+  const { result } = await parseHtml(html, { sourceUrl });
+  return result;
 }
 
 function firstBlock(result: ExtractionResult): RawBlock {

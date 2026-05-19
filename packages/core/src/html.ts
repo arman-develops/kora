@@ -682,15 +682,11 @@ export interface ParseOptions {
 export async function parseHtml(
   html: string,
   options: ParseOptions,
-): Promise<ExtractionResult> {
+): Promise<ParseOutput> {
   const { sourceUrl } = options;
   const documentDiagnostics: Diagnostic[] = [];
  
-  const $ = await cheerio.fromURL
-    ? // If running in a context where fromURL is available, we still use
-      // load() for string input — fromURL is for remote fetching.
-      cheerio.load(html)
-    : cheerio.load(html);
+  const $ = cheerio.load(html);
  
   // Strip auto-excluded elements before any traversal.
   // These are never meaningful content per spec.
@@ -719,8 +715,27 @@ export async function parseHtml(
   detectOrphans($, documentDiagnostics);
  
   return {
-    sourceUrl,
-    blocks,
-    documentDiagnostics,
+    result: {
+      sourceUrl,
+      blocks,
+      documentDiagnostics,
+    },
+    $,
   };
+}
+
+/**
+ * Output of parseHtml.
+ *
+ * Returns both the structured extraction result and the live Cheerio instance
+ * so downstream pipeline stages (inference, crawler) can operate on the same
+ * parsed DOM without re-parsing the HTML string.
+ *
+ * The CheerioAPI instance reflects the auto-stripped document — nav, footer,
+ * and header elements outside kora-archetype containers have already been
+ * removed. Inference operates on this cleaned DOM.
+ */
+export interface ParseOutput {
+  result: ExtractionResult;
+  $: cheerio.CheerioAPI;
 }

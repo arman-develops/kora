@@ -148,3 +148,106 @@ export interface ExtractionResult {
   blocks: RawBlock[];
   documentDiagnostics: Diagnostic[];
 }
+
+// Inference results types
+
+/**
+ * One node in the heading hierarchy extracted from a content block.
+ * Represents h1–h3 elements in DOM order.
+ */
+export interface StructureNode {
+  level: 1 | 2 | 3;
+  text: string;
+}
+
+/**
+ * One element within a proximity cluster.
+ * Text is the element's text content; tag is its lowercase tag name.
+ */
+export interface ClusterMember {
+  tag: string;
+  text: string;
+}
+
+/**
+ * A group of unmarked elements inferred to belong together by
+ * container proximity. Produced by the inference pipeline for content
+ * that carries no kora-* marks.
+ *
+ * Agents may use or discard these — they are never authoritative.
+ * Explicitly marked content always takes priority.
+ */
+export interface ImplicitCluster {
+  /** CSS-style description of the container element, for debugging */
+  containerContext: string;
+  members: ClusterMember[];
+  confidence: Confidence;
+}
+
+/**
+ * One entry in the internal link graph. Represents a link between the
+ * current page and another page on the same site.
+ */
+export interface RelatedContentLink {
+  title: string;
+  url: string;
+}
+
+/**
+ * Output of the structural inference pipeline for one HTML document.
+ *
+ * All three inference jobs run over the same Cheerio instance passed
+ * from parseHtml. Inference never mutates RawBlocks — it produces
+ * supplementary data the builder merges into output payloads.
+ *
+ * `blockInference` is keyed by block index in ExtractionResult.blocks.
+ * Nested blocks are not indexed here — they share the document-level
+ * structure and link graph.
+ */
+export interface InferenceResult {
+  /**
+   * Per-block heading hierarchy. Key is the block's index in
+   * ExtractionResult.blocks. Value is the ordered heading nodes
+   * extracted from within that block's container.
+   */
+  blockStructure: Map<number, StructureNode[]>;
+ 
+  /**
+   * Proximity clusters found in the document outside any kora-archetype
+   * container. These represent potentially meaningful unmarked content.
+   */
+  implicitClusters: ImplicitCluster[];
+ 
+  /**
+   * Internal links found in the document. Populated from <a href> elements
+   * whose href shares the same origin as sourceUrl.
+   */
+  relatedContent: RelatedContentLink[];
+ 
+  /**
+   * Inferred archetype candidates for regions of the document that carry
+   * no kora-archetype attribute. Only produced when the inference pipeline
+   * finds strong structural signals.
+   *
+   * These are never promoted to RawBlocks automatically — the builder
+   * decides whether to include them, always marked inferred: true.
+   */
+  inferredBlocks: InferredBlockCandidate[];
+}
+ 
+/**
+ * A candidate content block identified by the archetype inference fallback.
+ * Produced when structural signals (article, time, figure, table) suggest
+ * a content shape but no kora-archetype attribute is present.
+ */
+export interface InferredBlockCandidate {
+  archetype: import("./archetypes.js").Archetype;
+  confidence: Confidence;
+  /** The structural signals that triggered this inference */
+  signals: string[];
+  /** Text content of the candidate region */
+  text: string;
+  /** CSS-style description of the container, for debugging */
+  containerContext: string;
+}
+ 
