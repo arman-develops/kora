@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.base.json",
+
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+
+    "baseUrl": ".",
+
+    "paths": {
+      "@kora/types": ["../types/src/index.ts"]
+    }
+  },
+
+  "include": ["src"],
+
+  "references": [
+    { "path": "../types" }
+  ]
+}

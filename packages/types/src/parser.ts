@@ -9,7 +9,7 @@
  * collected as Diagnostics on the containing block.
  */
 
-import { Archetype, Confidence, SpecialElement } from "./archetypes";
+import { Archetype, Confidence, SpecialElement } from "./archetypes.js";
 
 // diagnostics
 
@@ -128,7 +128,7 @@ export interface RawBlock {
     sourceUrl: string
     fields: RawField[]
     items: RawItem[]
-    turns: RawTurn
+    turns: RawTurn[]
     nestedBlocks: RawBlock[]
     diagnostics: Diagnostic[]
 }
