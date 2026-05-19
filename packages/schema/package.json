@@ -1,0 +1,14 @@
+{
+  "name": "@kora/schema",
+  "version": "0.1.0",
+  "private": false,
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}
