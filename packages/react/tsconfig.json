@@ -3,17 +3,19 @@
 
   "compilerOptions": {
     "composite": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
 
-    "paths": {
-      "@kora/types": ["../types/src/index.ts"]
-    }
+    "lib": ["ES2022", "DOM"],
+    "types": ["node"],
+    "jsx": "react-jsx",
+
+    "outDir": "./dist",
+    "rootDir": "./src"
   },
 
   "include": ["src"],
 
   "references": [
-    { "path": "../types" }
+    { "path": "../types" },
+    { "path": "../core" }
   ]
 }

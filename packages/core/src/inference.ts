@@ -232,9 +232,7 @@ function inferBlockStructure(
   return blockStructure;
 }
 
-// ---------------------------------------------------------------------------
 // Job 2 — Proximity clustering
-// ---------------------------------------------------------------------------
 
 /**
  * Determine the confidence level for an implicit cluster based on
@@ -388,9 +386,7 @@ function inferLinkGraph(
   return links;
 }
 
-// ---------------------------------------------------------------------------
 // Job 4 — Archetype inference fallback
-// ---------------------------------------------------------------------------
 
 /**
  * Infer archetype candidates for unmarked regions of the document.
@@ -479,9 +475,7 @@ function inferArchetypeCandidates(
   return candidates;
 }
 
-// ---------------------------------------------------------------------------
 // Public API
-// ---------------------------------------------------------------------------
 
 export interface InferenceOptions {
   sourceUrl: string;
