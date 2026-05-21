@@ -8,13 +8,14 @@
 
     "paths": {
       "@kora/types": ["../types/src/index.ts"],
-      "@kora/middleware": ["../middleware/src/index.ts"]
+      "@kora/core": ["../core/src/index.ts"]
     }
   },
 
   "include": ["src"],
 
   "references": [
-    { "path": "../types" }
+    { "path": "../types" },
+    {"path": "../core"}
   ]
 }
